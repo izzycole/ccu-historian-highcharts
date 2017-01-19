@@ -1,0 +1,128 @@
+body,
+html,
+.content {
+  height: 100%;
+  overflow: hidden;
+}
+section {
+  /* height: 50%; */
+  width: 100%;
+  min-height: 50px;
+  flex: 1;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  align-content: space-around;
+}
+.bottom > div {
+  height: 100%;
+}
+.bottom .rg-top {
+  /* display: none; */
+}
+section.resizable {
+  flex: 0 0 300px;
+}
+.overflow {
+  overflow: scroll;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+}
+highchart {
+  width: 100%;
+}
+.content {
+  flex: 1;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-around;
+  align-content: space-around;
+}
+.rg-bottom {
+  background: #efefef;
+  bottom: 10px;
+}
+table {
+  min-width: 100%;
+}
+.table-hover {
+  cursor: pointer;
+}
+.form-inline {
+  width: 100%;
+}
+/* Series options */
+/* Default colors */
+.color-0 {
+  fill: #7cb5ec !important;
+  stroke: #7cb5ec !important;
+}
+.color-1 {
+  fill: #434348 !important;
+  stroke: #434348 !important;
+}
+.color-2 {
+  fill: #90ed7d !important;
+  stroke: #90ed7d !important;
+}
+.color-3 {
+  fill: #f7a35c !important;
+  stroke: #f7a35c !important;
+}
+.color-4 {
+  fill: #8085e9 !important;
+  stroke: #8085e9 !important;
+}
+.color-5 {
+  fill: #f15c80 !important;
+  stroke: #f15c80 !important;
+}
+.color-6 {
+  fill: #e4d354 !important;
+  stroke: #e4d354 !important;
+}
+.color-7 {
+  fill: #2b908f !important;
+  stroke: #2b908f !important;
+}
+.color-8 {
+  fill: #f45b5b !important;
+  stroke: #f45b5b !important;
+}
+.color-9 {
+  fill: #91e8e1 !important;
+  stroke: #91e8e1 !important;
+}
+.color-0 {
+  fill: #7cb5ec !important;
+  stroke: #7cb5ec !important;
+}
+.row-color-1 {
+  background: #434348 !important;
+}
+.row-color-2 {
+  background: #90ed7d !important;
+}
+.row-color-3 {
+  background: #f7a35c !important;
+}
+.row-color-4 {
+  background: #8085e9 !important;
+}
+.row-color-5 {
+  background: #f15c80 !important;
+}
+.row-color-6 {
+  background: #e4d354 !important;
+}
+.row-color-7 {
+  background: #2b908f !important;
+}
+.row-color-8 {
+  background: #f45b5b !important;
+}
+.row-color-9 {
+  background: #91e8e1 !important;
+}

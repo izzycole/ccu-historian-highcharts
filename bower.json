@@ -1,0 +1,26 @@
+{
+  "name": "ccu-historian-highcharts",
+  "authors": [
+    "sebi <sebi@code-labor.de>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "angularjs#^1.6.1",
+    "bootstrap": "^3.3.7",
+    "highcharts": "^5.0.6",
+    "highcharts-ng": "^1.0.0",
+    "angular-bootstrap": "^2.4.0",
+    "angular-resizable": "^1.2.0"
+  }
+}

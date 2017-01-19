@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CCU Historian Highcharts</title>
+
+    <script src="config.js"></script>
+    <script src="js/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/plugins.css"/>
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+</head>
+<body ng-app="ccuHistorianHighchartsApp" ng-controller="DatapointsCtrl">
+
+<div class="content">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">CCU Historian Highcharts</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <!-- <ul class="nav navbar-nav">
+
+                     <li class=""><a href="#">Link <span class="sr-only">(current)</span></a></li>
+                     <li><a href="#">Link</a></li>
+                     <li class="dropdown">
+                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                            aria-expanded="false">Dropdown <span class="caret"></span></a>
+                         <ul class="dropdown-menu">
+                             <li><a href="#">Action</a></li>
+                             <li role="separator" class="divider"></li>
+                             <li><a href="#">Separated link</a></li>
+                         </ul>
+                     </li>
+                 </ul>
+                 -->
+                 <form class="navbar-form navbar-left">
+                     <div class="form-group">
+                         <div class="input-group">
+                             <input type="text" class="form-control" placeholder="Suche" ng-model="searchWord">
+                             <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+                         </div>
+
+                         <div class="input-group">
+                             <input class="form-control" type="range" min="1" max="24" step="1" ng-model="days" ng-mouseup="updateSeries()" />
+                             <div class="input-group-addon">Letzte {{days}} Tage</div>
+                         </div>
+                     </div>
+                 </form>
+                 <ul class="nav navbar-nav navbar-right">
+
+                     <li ng-if="chartOptions.series | objLength"><a href="#" ng-click="resetSeries()">Auswahl aufheben ({{ chartOptions.series | objLength}})</a></li>
+                     <li class="dropdown">
+                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                            aria-expanded="false">Chart Settings <span class="glyphicon glyphicon-cog"></span></a>
+                         <ul class="dropdown-menu">
+                             <li><a href="#" ng-click="chartOptions.legend.enabled = !chartOptions.legend.enabled"><span class="glyphicon {{ chartOptions.legend.enabled ? 'glyphicon-ok' : ''}}"></span> Legende</a></li>
+                             <li><a href="#">Another action</a></li>
+                             <li><a href="#">Something else here</a></li>
+                             <li role="separator" class="divider"></li>
+                             <li><a href="#">Separated link</a></li>
+                         </ul>
+                     </li>
+                 </ul>
+             </div>
+             <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+    <section class="top" resizable r-directions="['bottom']" r-flex="true">
+        <div class="overflow table-responsive">
+            <table class="table table-hover" show-filter="true">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th ng:repeat="key in showColumns">
+                        <a ng-click="orderTableBy(key)">{{ key }}</a>
+                    </th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th ng:repeat="key in showColumns">
+                        <select ng-name="key" ng-model="filter[key]" ng-change="changeFilter(key,filter)"
+                                ng-options="category for category in distinctValues[key] | orderBy:category">
+                            <option></option>
+                        </select>
+                        </select>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng:repeat="dataPoint in dataPoints | orderBy:sortType:sortReverse | filter:searchWord | filter:categoryFilter:true"
+                    ng-click="getTimeSeries(dataPoint.idx)"
+                    class="{{ chartOptions.series[dataPoint.idx] ? 'success' : '' }}">
+                    <td class="row-color-{{chartOptions.series[dataPoint.idx].color}}">
+                        <span class="{{ chartOptions.series[dataPoint.idx] ? 'glyphicon glyphicon-remove' : 'glyphicon glyphicon-plus' }}"></span>
+                    </td>
+                    <td ng:repeat="key in showColumns" sortable="key">
+                        {{ dataPoint[key] }}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="bottom">
+
+        <highchart id="chart1" config="chartOptions"></highchart>
+
+    </section>
+</div>
+</body>
+</html>
