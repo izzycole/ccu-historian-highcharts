@@ -7,7 +7,10 @@ This is very basic state based on my private homematic setup. Please feel free t
 # Installation
 
 1. Copy contents of "dist/" to a webserver or into the "webapp/custom/" direcory of your historian installation.
-2. Edit congig.js to your needs
+2. Edit config.js to your needs
+	1. Insert IP-Address and Port of your ccu-historian server 
+	2. Uncomment Colums to show them in the data-points table
+	3. Add Favorties to the Main-Menu. Take ids from "idx" column
 3. Open index.html in Browser 
 
 # Configuration
