@@ -1,4 +1,4 @@
-var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['angular-loading-bar', 'highcharts-ng', 'angularResizable', ])
+var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['angular-loading-bar', 'highcharts-ng', 'angularResizable','ui.bootstrap' ])
     .filter('objLength', function () {
         return function (obj) {
             if (typeof (obj) == 'object')
@@ -7,6 +7,8 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['an
     })
     .controller('DatapointsCtrl', function ($scope, $http) {
 
+
+        $scope.config = ChhConfig;
         $scope.showColumns = ChhConfig.ShowColumns;
         $scope.language = ChhLanguage.default;
 
@@ -120,8 +122,11 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['an
                 });
 
                 $scope.distinctValues = distinct;
-              //  $scope.getTimeSeries(178);
-              //  $scope.getTimeSeries(199);
+
+                // load first favorite if available
+                if(ChhConfig.favorites[0]){
+                    $scope.loadFavorite(ChhConfig.favorites[0].ids);
+                }
             });
         };
 
@@ -132,15 +137,20 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['an
                 delete $scope.chartOptions.series[idx];
             } else {
 
+                var startdate = $scope.startdate;
+                if ($scope.startdate instanceof Date){
+                   startdate =  Math.floor( $scope.startdate.getTime() );
+                }
+                var enddate = $scope.enddate;
+                if ($scope.enddate instanceof Date){
+                    enddate =  Math.floor( $scope.enddate.getTime() );
+                }
+
                 // reset
                 $scope.chartOptions.series[idx] = {};
 
-                // set start / enddate
-                $scope.startdate = Date.now() - 60 * 60 * 24 * 1000 * $scope.days;
-                $scope.enddate = Date.now();
-
                 var idx;
-                var url = $scope.jsonServiceUrl + "?m=getTimeSeries&p1=" + idx + "&p2=" + $scope.startdate + "&p3=" + $scope.enddate;
+                var url = $scope.jsonServiceUrl + "?m=getTimeSeries&p1=" + idx + "&p2=" + startdate + "&p3=" + enddate;
 
                 $http.get(url).then(function (response) {
                     var timeSeries = response.data.result;
@@ -245,6 +255,13 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['an
 
         }
 
+        $scope.loadFavorite = function(ids){
+            $scope.resetSeries();
+            $.each(ids, function (i, idx) {
+                $scope.getTimeSeries(idx);
+            });
+        }
+
         $scope.changeFilter = function (key, value) {
             if (value[key] != null) {
                 $scope.categoryFilter[key] = value[key];
@@ -261,8 +278,54 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['an
             $.each($scope.chartOptions.series, function (idx,series) {
                 delete $scope.chartOptions.series[idx];
                 $scope.getTimeSeries(idx);
+
+                // Update Datepicker
+                $scope.startdateOptions.maxDate = $scope.enddate;
+                $scope.enddateOptions.minDate = $scope.startdate;
             });
-        }
+        };
+
+        $scope.startdateOptions = {
+            formatYear: 'yy',
+            maxDate: $scope.enddate,
+            minDate: false,
+            startingDay: 1
+        };
+
+        $scope.enddateOptions = {
+            formatYear: 'yy',
+            maxDate: new Date(),
+            minDate: $scope.startdate,
+            startingDay: 1
+        };
+
+        $scope.toggleMin = function() {
+          //  $scope.dateOptions.minDate = $scope.inlineOptions.minDate;
+        };
+
+        $scope.toggleMin();
+
+        $scope.open1 = function() {
+            $scope.popup1.opened = true;
+        };
+
+        $scope.open2 = function() {
+            $scope.popup2.opened = true;
+        };
+
+        $scope.setDate = function(year, month, day) {
+            $scope.dt = new Date(year, month, day);
+        };
+
+        $scope.format = 'dd.MM.yyyy';
+
+        $scope.popup1 = {
+            opened: false
+        };
+
+        $scope.popup2 = {
+            opened: false
+        };
 
         $scope.init();
 

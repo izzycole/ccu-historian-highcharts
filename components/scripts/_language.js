@@ -1,7 +1,11 @@
 var ChhLanguage = {
     'default': {
         'interface': {
-            'search': 'Suche'
+            'search': 'Suche',
+            'today': 'Heute',
+            'clear': 'Zurücksetzen',
+            'close': 'Schließen',
+            'favorites' : 'Favoriten'
         },
         'historian': {
 

@@ -41,6 +41,7 @@ gulp.task('cssPlugins', function(){
     var cssFiles = [
         'components/libs/bootstrap/dist/css/bootstrap.css',
         'components/libs/highcharts/css/highcharts.css',
+        'components/libs/angular-bootstrap/ui-bootstrap-csp.css',
         'components/libs/angular-resizable/angular-resizable.min.css',
         'components/libs/angular-loading-bar/build/loading-bar.min.css'
     ];

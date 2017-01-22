@@ -32,21 +32,16 @@
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <!-- <ul class="nav navbar-nav">
-
-                     <li class=""><a href="#">Link <span class="sr-only">(current)</span></a></li>
-                     <li><a href="#">Link</a></li>
+                <ul class="nav navbar-nav" ng-if="config.favorites | objLength">
                      <li class="dropdown">
                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                            aria-expanded="false">Dropdown <span class="caret"></span></a>
+                            aria-expanded="false">{{ language.interface.favorites }} <span class="caret"></span></a>
                          <ul class="dropdown-menu">
-                             <li><a href="#">Action</a></li>
-                             <li role="separator" class="divider"></li>
-                             <li><a href="#">Separated link</a></li>
+                             <li ng-repeat="favorite in config.favorites"><a href="#" ng-click="loadFavorite(favorite.ids)">{{ favorite.title }}</a></li>
                          </ul>
                      </li>
                  </ul>
-                 -->
+
                  <form class="navbar-form navbar-left">
                      <div class="form-group">
                          <div class="input-group">
@@ -55,9 +50,39 @@
                          </div>
 
                          <div class="input-group">
-                             <input class="form-control" type="range" min="1" max="24" step="1" ng-model="days" ng-mouseup="updateSeries()" />
-                             <div class="input-group-addon">Letzte {{days}} Tage</div>
+                             <input type="text" class="form-control"
+                                    uib-datepicker-popup="{{format}}"
+                                    ng-model="startdate"
+                                    is-open="popup1.opened"
+                                    datepicker-options="startdateOptions"
+                                    ng-required="true"
+                                    close-text="{{ language.interface.close }}"
+                                    clear-text="{{ language.interface.clear }}"
+                                    current-text="{{ language.interface.today }}"
+                                    ng-change="updateSeries()"
+                                     />
+                             <span class="input-group-btn">
+                                 <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                             </span>
                          </div>
+
+                         <div class="input-group">
+                             <input type="text" class="form-control"
+                                    uib-datepicker-popup="{{format}}"
+                                    ng-model="enddate"
+                                    is-open="popup2.opened"
+                                    datepicker-options="enddateOptions"
+                                    ng-required="true"
+                                    close-text="{{ language.interface.close }}"
+                                    clear-text="{{ language.interface.clear }}"
+                                    current-text="{{ language.interface.today }}"
+                                    ng-change="updateSeries()"
+                                     />
+                             <span class="input-group-btn">
+                                 <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+                             </span>
+                         </div>
+
                      </div>
                  </form>
                  <ul class="nav navbar-nav navbar-right">
@@ -68,10 +93,6 @@
                             aria-expanded="false">Chart Settings <span class="glyphicon glyphicon-cog"></span></a>
                          <ul class="dropdown-menu">
                              <li><a href="#" ng-click="chartOptions.legend.enabled = !chartOptions.legend.enabled"><span class="glyphicon {{ chartOptions.legend.enabled ? 'glyphicon-ok' : ''}}"></span> Legende</a></li>
-                             <li><a href="#">Another action</a></li>
-                             <li><a href="#">Something else here</a></li>
-                             <li role="separator" class="divider"></li>
-                             <li><a href="#">Separated link</a></li>
                          </ul>
                      </li>
                  </ul>
