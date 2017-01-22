@@ -1,11 +1,10 @@
-var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['highcharts-ng', 'angularResizable'])
+var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['angular-loading-bar', 'highcharts-ng', 'angularResizable', ])
     .filter('objLength', function () {
         return function (obj) {
             if (typeof (obj) == 'object')
                 return Object.keys(obj).length;
         };
     })
-
     .controller('DatapointsCtrl', function ($scope, $http) {
 
         $scope.showColumns = ChhConfig.ShowColumns;
@@ -14,8 +13,6 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['hi
         $scope.seriesOptions = [];
         $scope.jsonServiceUrl = ChhConfig.CcuHistorianHost+"/query/jsonrpc.gy";
         $scope.days = 7;
-
-        //alert(ChhConfig);
 
         $scope.startdate = Date.now() - 60 * 60 * 24 * 1000 * $scope.days;
         $scope.enddate = Date.now();

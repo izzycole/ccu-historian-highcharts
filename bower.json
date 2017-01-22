@@ -21,6 +21,7 @@
     "highcharts": "^5.0.6",
     "highcharts-ng": "^1.0.0",
     "angular-bootstrap": "^2.4.0",
-    "angular-resizable": "^1.2.0"
+    "angular-resizable": "^1.2.0",
+    "angular-loading-bar": "^0.9.0"
   }
 }

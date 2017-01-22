@@ -24,8 +24,9 @@ gulp.task('js', function() {
         'components/libs/angular-bootstrap/ui-bootstrap.min.js',
         'components/libs/angular-bootstrap/ui-bootstrap-tpls.min.js',
         'components/libs/angular-resizable/angular-resizable.min.js',
+        'components/libs/angular-loading-bar/build/loading-bar.js',
         'components/libs/highcharts/js/highstock.js',
-        'components/libs/highcharts-ng/dist/highcharts-ng.min.js',
+        'components/libs/highcharts-ng/dist/highcharts-ng.js',
         'components/scripts/*.js'
     ];
     return gulp.src(jsFiles)
@@ -40,7 +41,8 @@ gulp.task('cssPlugins', function(){
     var cssFiles = [
         'components/libs/bootstrap/dist/css/bootstrap.css',
         'components/libs/highcharts/css/highcharts.css',
-        'components/libs/angular-resizable/angular-resizable.min.css'
+        'components/libs/angular-resizable/angular-resizable.min.css',
+        'components/libs/angular-loading-bar/build/loading-bar.min.css'
     ];
 
     return gulp.src(cssFiles)
