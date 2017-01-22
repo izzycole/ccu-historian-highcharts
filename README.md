@@ -17,7 +17,7 @@ This is very basic state based on my private homematic setup. Please feel free t
 
 Configuration sample:
 
- ```
+```
 var ChhConfig = {
     "CcuHistorianHost": "http://192.168.1.57:81",
     "ShowColumns": [
@@ -54,6 +54,6 @@ var ChhConfig = {
     ]
 }
 
-```
+``` 
 
-
+![](./ccu-historian-highcharts.png?raw=true)
