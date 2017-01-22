@@ -1,14 +1,25 @@
 var ChhConfig = {
   "CcuHistorianHost": "http://192.168.1.57:81",
   "ShowColumns": [
-    'idx',
-    'interfaceId',
+    //'address',
     'displayName',
-    'function',
     'room',
-    'unit',
     'identifier',
-    'type',
-    'address'
+    //'preprocType',
+    //'preprocParam',
+    'function',
+    //'comment',
+    //'paramSet',
+    //'tabOrder',
+    //'maximum',
+    'unit',
+    //'minimum',
+    //'control',
+    //'operations',
+    //'flags',
+    //'type',
+    //'interfaceId',
+    //'defaultValue',
+    'idx'
   ]
 }

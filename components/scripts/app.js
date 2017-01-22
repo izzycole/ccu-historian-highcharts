@@ -5,9 +5,11 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['hi
                 return Object.keys(obj).length;
         };
     })
+
     .controller('DatapointsCtrl', function ($scope, $http) {
 
         $scope.showColumns = ChhConfig.ShowColumns;
+        $scope.language = ChhLanguage.default;
 
         $scope.seriesOptions = [];
         $scope.jsonServiceUrl = ChhConfig.CcuHistorianHost+"/query/jsonrpc.gy";
@@ -39,6 +41,7 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['hi
                 y: 100,
                 shadow: true
             },
+            // different unit templates for y Axis
             yAxis: [
                 {id: "C", labels: {format: '{value}°C'}},
                 {id: "B", labels: {format: '{value}'},  ceiling: 1, max: 1, allowDecimals: false},
@@ -50,38 +53,20 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['hi
             chart: {
                 events: {
                     addSeries: function (event) {
-
+                        // event when series is added
                     }
                 }
             },
             series: {},
             rangeSelector: {
-                // noe date inputs
+                // no date inputs
                 buttons: [],
                 inputEnabled: false
-            },
+            }
         };
 
         Highcharts.setOptions({
-            lang: {
-                decimalPoint: ',',
-                thousandsSep: '.',
-                loading: 'Daten werden geladen...',
-                months: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
-                weekdays: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
-                shortMonths: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
-                exportButtonTitle: "Exportieren",
-                printButtonTitle: "Drucken",
-                rangeSelectorFrom: "Von",
-                rangeSelectorTo: "Bis",
-                rangeSelectorZoom: "", //"Zeitraum",
-                downloadPNG: 'Download als PNG-Bild',
-                downloadJPEG: 'Download als JPEG-Bild',
-                downloadPDF: 'Download als PDF-Dokument',
-                downloadSVG: 'Download als SVG-Bild',
-                resetZoom: "Zoom zurücksetzen",
-                resetZoomTitle: "Zoom zurücksetzen"
-            },
+            lang: ChhLanguage.default.highcharts,
             global: {
                 useUTC: false,
                 timezoneOffset: 4
@@ -96,51 +81,64 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['hi
 
 
         $scope.init = function () {
+
+            // get all Datapoints
             var url = $scope.jsonServiceUrl + "?m=getDataPoint";
             $http.get(url).then(function (response) {
                 var distinct = {};
 
                 $.each(response.data.result, function (i, e) {
 
-
+                    // No Stings and hidden (in historian) dataPoints
                     if (e.attributes.type != "STRING" && e.historyHidden === false) {
 
+                        // Flatten dataPoint
                         dataPoint = Object.assign(e.id, e.attributes, {idx: e.idx});
                         $scope.dataPoints.push(dataPoint);
 
+                        // Process dataPoints
                         $.each(dataPoint, function (key, value) {
-                            if (!distinct[key]) distinct[key] = [];
-                            if (distinct[key].indexOf(value) < 0) distinct[key].push(value);
+
+                            if(value != null){
+
+                                // Translate default values
+                                if(ChhLanguage.default.historian[value]){
+                                    value = ChhLanguage.default.historian[value];
+                                    dataPoint[key] = value;
+                                }
+
+                                //Collect distinct values for filters
+                                if (!distinct[key]) distinct[key] = [];
+                                if (distinct[key].indexOf(value) < 0) distinct[key].push(value);
+                            }
+
+
                         });
 
                     } else {
                         if(e.attributes.displayName == 'HighchartsConfig'){
-                            //@TODO read config / set config
+                            //@TODO read config / set config in CCU systemvariable
                         }
                     }
                 });
 
-                $.each(distinct.unit, function (i, unit) {
-                    $scope.chartOptions.yAxis.push({
-                        labels: {
-                            format: '{value}' + unit
-                        }
-                    });
-
-                });
                 $scope.distinctValues = distinct;
               //  $scope.getTimeSeries(178);
               //  $scope.getTimeSeries(199);
             });
         };
 
+        // request time series by historian id
         $scope.getTimeSeries = function (idx) {
             if (typeof ($scope.chartOptions.series[idx]) !== "undefined") {
+                // remove datapoint if already present (toggle mode)
                 delete $scope.chartOptions.series[idx];
             } else {
 
+                // reset
                 $scope.chartOptions.series[idx] = {};
 
+                // set start / enddate
                 $scope.startdate = Date.now() - 60 * 60 * 24 * 1000 * $scope.days;
                 $scope.enddate = Date.now();
 
@@ -158,7 +156,7 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['hi
                     var markerEnabled = false;
                     var randomColor = Math.floor(Math.random() * (10 - 1) + 1);
 
-
+                    // change series config to match datapoint prooerties
                     switch (timeSeries.dataPoint.attributes.unit) {
 
                         case 'min':
@@ -199,7 +197,7 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['hi
                         case 'ACTION':
                             yAxisId = "B";
                             lineWidth = 0;
-                            markerEnabled = true;
+                            markerEnabled = true; // points for eg. pressed switches
                             break;
                     }
 
@@ -227,6 +225,7 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['hi
                         }
                     }
 
+                    // add timestamps
                     $.each(timeSeries.values, function (i, e) {
                         newSeries.data.push([timeSeries.timestamps[i], e]);
                     });

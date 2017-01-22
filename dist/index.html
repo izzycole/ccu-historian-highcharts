@@ -50,7 +50,7 @@
                  <form class="navbar-form navbar-left">
                      <div class="form-group">
                          <div class="input-group">
-                             <input type="text" class="form-control" placeholder="Suche" ng-model="searchWord">
+                             <input type="text" class="form-control" placeholder="{{ language.interface.search }}" ng-model="searchWord">
                              <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
                          </div>
 
@@ -87,7 +87,7 @@
                 <tr>
                     <th></th>
                     <th ng:repeat="key in showColumns">
-                        <a ng-click="orderTableBy(key)">{{ key }}</a>
+                        <a ng-click="orderTableBy(key)">{{ language.historian[key] ? language.historian[key] : key }}</a>
                     </th>
                 </tr>
                 <tr>

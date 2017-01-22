@@ -18,18 +18,19 @@ gulp.task('less', function () {
 
 gulp.task('js', function() {
     var jsFiles = [
-        'components/libs/jquery/dist/jquery.js',
+        'components/libs/jquery/dist/jquery.min.js',
+        'components/libs/bootstrap/dist/js/bootstrap.min.js',
         'components/libs/angular/angular.min.js',
         'components/libs/angular-bootstrap/ui-bootstrap.min.js',
         'components/libs/angular-bootstrap/ui-bootstrap-tpls.min.js',
         'components/libs/angular-resizable/angular-resizable.min.js',
         'components/libs/highcharts/js/highstock.js',
-        'components/libs/highcharts-ng/dist/highcharts-ng.js',
+        'components/libs/highcharts-ng/dist/highcharts-ng.min.js',
         'components/scripts/*.js'
     ];
     return gulp.src(jsFiles)
-        // uglify in build script
         .pipe(concat('main.js'))
+        // uglify later in build script
         //.pipe(uglify())
         .pipe(gulp.dest('dist/js'));
 });
@@ -68,6 +69,6 @@ gulp.task('watch', function() {
 
     gulp.watch("components/**/*.js", ['js']);
     gulp.watch("components/stylesheet/**/*.less", ['less']);
-    gulp.watch("*.html").on('change', browserSync.reload);
+    gulp.watch("**/*.html").on('change', browserSync.reload);
     gulp.watch("dist/**/*.js").on('change', browserSync.reload);
 });
