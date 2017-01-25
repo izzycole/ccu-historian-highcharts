@@ -1,4 +1,4 @@
-var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['angular-loading-bar', 'highcharts-ng', 'angularResizable','ui.bootstrap' ])
+var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['angular-loading-bar', 'highcharts-ng', 'angularResizable', 'ngTouch', 'ui.bootstrap' ])
     .filter('objLength', function () {
         return function (obj) {
             if (typeof (obj) == 'object')
@@ -40,13 +40,19 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['an
                 y: 100,
                 shadow: true
             },
+            xAxis: [{
+              ordinal: false
+            }],
             // different unit templates for y Axis
             yAxis: [
-                {id: "C", labels: {format: '{value}°C'}},
-                {id: "B", labels: {format: '{value}'},  ceiling: 1, max: 1, allowDecimals: false},
+                {id: "default", labels: {format: '{value}'}},
+                {id: "C", labels: {format: '{value}°C'}, minPadding: 1, maxPadding: 1},
+                {id: "B", labels: {format: '{value}'},  ceiling: 1, max: 2, allowDecimals: false},
                 {id: "V", labels: {format: '{value}V'}},
                 {id: "P", labels: {format: '{value}%'}},
                 {id: "W", labels: {format: '{value}W'}},
+                {id: "WH", labels: {format: '{value}Wh'}},
+                {id: "MA", labels: {format: '{value}mA'}},
                 {id: "MIN", labels: {format: '{value}min'},allowDecimals: false},
             ],
             chart: {
@@ -54,7 +60,8 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['an
                     addSeries: function (event) {
                         // event when series is added
                     }
-                }
+                },
+                zoomType: 'xy'
             },
             series: {},
             rangeSelector: {
@@ -72,12 +79,6 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['an
             }
 
         });
-
-
-        $scope.$on("angular-resizable.resizing", function (event, args) {
-            $scope.chartOptions.getChartObj().reflow();
-        });
-
 
         $scope.init = function () {
 
@@ -156,7 +157,7 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['an
                     var timeSeries = response.data.result;
 
                     // default series config
-                    var yAxisId = "W";
+                    var yAxisId = "default";
                     var scale = 1;
                     var step = false;
                     var lineWidth = 1;
@@ -184,6 +185,14 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['an
 
                         case 'W':
                             yAxisId = "W";
+                            break;
+
+                        case 'Wh':
+                            yAxisId = "WH";
+                            break;
+
+                        case 'mA':
+                            yAxisId = "MA";
                             break;
 
                         case '°C':
@@ -260,7 +269,7 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['an
             $.each(ids, function (i, idx) {
                 $scope.getTimeSeries(idx);
             });
-        }
+        };
 
         $scope.changeFilter = function (key, value) {
             if (value[key] != null) {
@@ -268,11 +277,11 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['an
             } else {
                 delete $scope.categoryFilter[key];
             }
-        }
+        };
 
         $scope.resetSeries = function () {
             $scope.chartOptions.series = {};
-        }
+        };
 
         $scope.updateSeries = function(){
             $.each($scope.chartOptions.series, function (idx,series) {
@@ -325,6 +334,21 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['an
 
         $scope.popup2 = {
             opened: false
+        };
+
+        $scope.touchMove = function(target){
+            var offset = 80;
+            var pageY = $scope.$event.originalEvent.pageY;
+            $(target)[0].style.flexBasis = pageY - offset + 'px';
+            $scope.chartOptions.getChartObj().reflow();
+        };
+
+        $scope.$on("angular-resizable.resizing", function (event, args) {
+            $scope.chartOptions.getChartObj().reflow();
+        });
+
+        $scope.touchEnd = function(){
+            $scope.chartOptions.getChartObj().reflow();
         };
 
         $scope.init();

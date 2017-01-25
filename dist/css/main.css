@@ -7,7 +7,7 @@ html,
 section {
   /* height: 50%; */
   width: 100%;
-  min-height: 50px;
+  min-height: 0px;
   flex: 1;
   display: flex;
   flex-flow: row nowrap;
@@ -43,6 +43,14 @@ highchart {
 .rg-bottom {
   background: #efefef;
   bottom: 10px;
+}
+html.touch .touchBar {
+  background: transparent;
+  height: 3em;
+  position: absolute;
+  width: 100%;
+  margin-top: -2em;
+  z-index: 20;
 }
 table {
   min-width: 100%;

@@ -25,7 +25,7 @@ var ChhConfig = {
     "favorites": [
         {
             title: "Wohnzimmer",
-            ids: [178, 199]
+            ids: [178, 107]
         },
         {
             title: "Büro",

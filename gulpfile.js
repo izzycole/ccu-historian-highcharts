@@ -24,6 +24,8 @@ gulp.task('js', function() {
         'components/libs/angular-bootstrap/ui-bootstrap.min.js',
         'components/libs/angular-bootstrap/ui-bootstrap-tpls.min.js',
         'components/libs/angular-resizable/angular-resizable.min.js',
+        'components/libs/ngtouch/build/ngTouch.min.js',
+        'components/libs/modernizr-detectizr/libs/modernizr-detectizr.min.js',
         'components/libs/angular-loading-bar/build/loading-bar.js',
         'components/libs/highcharts/js/highstock.js',
         'components/libs/highcharts-ng/dist/highcharts-ng.js',
