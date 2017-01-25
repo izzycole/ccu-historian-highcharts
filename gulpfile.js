@@ -60,8 +60,7 @@ gulp.task('build', ['less', 'cssPlugins', 'js']);
 gulp.task('fonts', function() {
     return gulp.src([
         'components/libs/bootstrap/fonts/glyphicons-halflings-regular.*'
-    ])
-        .pipe(gulp.dest('dist/fonts'));
+    ]).pipe(gulp.dest('dist/fonts'));
 });
 
 
