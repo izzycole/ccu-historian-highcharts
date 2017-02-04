@@ -1389,15 +1389,25 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['an
             if (typeof (obj) == 'object')
                 return Object.keys(obj).length;
         };
+    }).filter('inArray', function($filter){
+        return function(list, arrayFilter, element){
+            if(arrayFilter){
+                return $filter("filter")(list, function(listItem){
+                    return arrayFilter.indexOf(listItem[element].toString()) > -1;
+                });
+            } else {
+                return list;
+            }
+        };
     })
     .controller('DatapointsCtrl', function ($scope, $http) {
-
 
         $scope.config = ChhConfig;
         $scope.showColumns = ChhConfig.ShowColumns;
         $scope.language = ChhLanguage.default;
 
         $scope.seriesOptions = [];
+        $scope.currentSeries = false;
         $scope.jsonServiceUrl = ChhConfig.CcuHistorianHost+"/query/jsonrpc.gy";
         $scope.days = 7;
 
@@ -1554,13 +1564,11 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['an
 
                         case 'min':
                              yAxisId = "MIN";
-                             step = true;
                              break;
 
                         case '100%':
-                            scale = 100;
+                            scale = 100; //@TODO: find a way to scale
                             yAxisId = "P";
-                            step = true;
                             break;
 
                         case '%':
@@ -1589,22 +1597,26 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['an
                             break;
                     }
 
-                    switch (timeSeries.dataPoint.attributes.type) {
-                        case 'BOOL':
-                            step = true;
-                            yAxisId = "B";
-                            break;
+                    // apply line styles from config
+                    if(ChhConfig.lineStyle.step.identifier.indexOf( timeSeries.dataPoint.id.identifier ) > -1)
+                        step = true;
 
-                        case 'ACTION':
-                            yAxisId = "B";
-                            lineWidth = 0;
-                            markerEnabled = true; // points for eg. pressed switches
-                            break;
+                    if(ChhConfig.lineStyle.step.type.indexOf( timeSeries.dataPoint.attributes.type ) > -1)
+                        step = true;
+
+                    if(ChhConfig.lineStyle.marker.identifier.indexOf( timeSeries.dataPoint.id.identifier) > -1) {
+                        markerEnabled = true;
+                        lineWidth = 0; //@TODO: line cant be hidden
+                    }
+
+                    if(ChhConfig.lineStyle.marker.type.indexOf( timeSeries.dataPoint.attributes.type) > -1) {
+                        markerEnabled = true;
+                        lineWidth = 0; //@TODO: line cant be hidden
                     }
 
                     var newSeries = {
                         id: idx,
-                        name: timeSeries.dataPoint.attributes.displayName, // + '<br>' + timeSeries.dataPoint.attributes.control,
+                        name: timeSeries.dataPoint.attributes.displayName + '<br>' + timeSeries.dataPoint.id.identifier,
                         data: [],
                         color: randomColor,
                         className: 'color-'+randomColor,
@@ -1633,7 +1645,6 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['an
 
                     // add Series to chart
                     $scope.chartOptions.series[idx] = newSeries;
-
                 });
             }
 
@@ -1666,6 +1677,16 @@ var ccuHistorianHighchartsApp = angular.module('ccuHistorianHighchartsApp', ['an
 
         $scope.resetSeries = function () {
             $scope.chartOptions.series = {};
+            $scope.currentSeries = false;
+        };
+
+        $scope.filterCurrent = function(){
+            if($scope.currentSeries){
+                $scope.currentSeries = false;
+            } else {
+                $scope.currentSeries = Object.keys($scope.chartOptions.series);
+            }
+
         };
 
         $scope.updateSeries = function(){

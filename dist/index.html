@@ -86,7 +86,8 @@
                      </div>
                  </form>
                  <ul class="nav navbar-nav navbar-right">
-
+                     <li ng-if="!currentSeries"><a href="#" ng-click="filterCurrent()">Ausgewählte</a></li>
+                     <li ng-if="currentSeries"><a href="#" ng-click="filterCurrent()">Alle</a></li>
                      <li ng-if="chartOptions.series | objLength"><a href="#" ng-click="resetSeries()">Auswahl aufheben ({{ chartOptions.series | objLength}})</a></li>
                      <li class="dropdown">
                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -123,7 +124,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng:repeat="dataPoint in dataPoints | orderBy:sortType:sortReverse | filter:searchWord | filter:categoryFilter:true"
+                <tr ng:repeat="dataPoint in dataPoints | orderBy:sortType:sortReverse | filter:searchWord | filter:categoryFilter:true | inArray:currentSeries:'idx'"
                     ng-click="getTimeSeries(dataPoint.idx)"
                     class="{{ chartOptions.series[dataPoint.idx] ? 'success' : '' }}">
                     <td class="row-color-{{chartOptions.series[dataPoint.idx].color}}">
