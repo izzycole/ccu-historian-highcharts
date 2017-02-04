@@ -37,22 +37,46 @@ var ChhConfig = {
         //'control',
         //'operations',
         //'flags',
-        //'type',
+        'type',
         //'interfaceId',
         //'defaultValue',
         'idx'
     ],
+    "lineStyle": {
+        "step": {
+            "identifier": [
+                'SET_TEMPERATURE',
+                'VALVE_STATE'
+            ],
+            "type": [
+                'BOOL',
+                'ACTION',
+                'ALARM'
+            ]
+        },
+        "marker": {
+            "identifier": [
+                'PRESS_SHORT',
+                'PRESS_LONG'
+            ],
+            "type": [
+                'ACTION',
+                'ALARM'
+            ]
+        },
+    },
     "favorites": [
         {
             title: "Wohnzimmer",
-            ids: [178, 199]
+            ids: [178, 107]
         },
         {
             title: "Büro",
-            ids: [147,149,322]
+            ids: [147, 149, 322]
         }
     ]
 }
+
 
 ``` 
 
